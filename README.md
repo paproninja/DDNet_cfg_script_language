@@ -1,4 +1,4 @@
-# DDMenu Script Language
+# DDNet Cfg Script Language
 
 DDNet CFG Script Language (DCSL) it's a declarative language designed to automatically generate `.cfg` files and folder structures for DDNet.
 
