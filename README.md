@@ -36,6 +36,18 @@ Lists are written between square brackets.
 ['value1', 'value2']
 ```
 
+Comments are written between hashes.
+
+```text
+# This is a comment #
+```
+
+```text
+#
+    This is also a comment
+#
+```
+
 Commas are optional and the compiler will ignore them. The compiler its not strict with format: You can write properties by lines with indents, as well as you can write properties in the same line.
 
 ---
@@ -225,6 +237,18 @@ it will result in:
 
 ```cfg
 exec mainfolder/subfolder/menu.cfg
+```
+
+You can also use backtracking. Example:
+
+```text
+exec: '../file.cfg'
+```
+
+This being defined in `mainfolder/subfolder`, it will result in:
+
+```cfg
+exec mainfolder/file.cfg
 ```
 
 The relative path is automatically kept in a stack when defining folders, if you want to retrieve it, you can use `$PATH`.

@@ -24,10 +24,16 @@ def gen_unbind(gen, value):
     return lines
 
 def gen_exec(gen, value):
-    rel = Path(*gen.path_stack) # get the relative path unpacking the path stack
-    target = gen.resolve(value) # resolve the target
+    stack = gen.path_stack.copy()
 
-    return f"exec {Path(*gen.path_stack) / target}" # return the exec command
+    for part in Path(gen.resolve(value)).parts:
+        if part == "..":
+            if stack:
+                stack.pop()
+        else:
+            stack.append(part)
+
+    return f"exec {'/'.join(stack)}"
 
 def gen_echo(gen, value):
     lines = []
@@ -98,6 +104,14 @@ class Lexer: # lexer class. This class is used to tokenize the input file
         while self.current is not None and self.current.isspace():
             self.advance()
 
+    def skip_comment(self): # skips comments until it finds another #
+        self.advance() # skips the first #
+        while self.current is not None:
+            if self.current == "#":
+                self.advance()
+                return
+            self.advance()
+
     def read_identifier(self): # it will read until a character is not alphanumeric
         result = ""
         while self.current is not None and (self.current.isalnum() or self.current == "_"):
@@ -125,6 +139,10 @@ class Lexer: # lexer class. This class is used to tokenize the input file
             # skips
             if self.current.isspace(): # skips whitespaces
                 self.skip_whitespace()
+                continue
+
+            if self.current == "#": # skips comments
+                self.skip_comment()
                 continue
 
             # symbols
