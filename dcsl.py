@@ -1,4 +1,5 @@
 from pathlib import Path
+import shutil
 
 def gen_command(gen, value):
     lines = []
@@ -134,6 +135,7 @@ class Lexer: # lexer class. This class is used to tokenize the input file
 
     def tokenize(self): # main function that will create the tokens
         tokens = []
+        print("Tokenizing...")
 
         while self.current is not None:
             # skips
@@ -190,6 +192,7 @@ class Lexer: # lexer class. This class is used to tokenize the input file
             # fallback
             raise Exception(f"Unexpected character: {self.current}")
 
+        print("Tokenization complete")
         return tokens
 
 class Parser:
@@ -217,7 +220,10 @@ class Parser:
         return token
 
     def parse(self): # main function that will parse the input file
-        return self.parse_object()
+        print("Parsing...")
+        parsed_tree = self.parse_object()
+        print("Parsing complete")
+        return parsed_tree
 
     def parse_object(self): # parses an object { ... }
         obj = {} # create an empty object
@@ -261,10 +267,12 @@ class Generator:
         self.globals = {}
 
     def generate(self): # main function that will generate the output files
+        print("Generating...")
         self.handle_globals(self.tree)
         if "ROOT" not in self.globals: # if ROOT is not defined in the root object, it raises an exception
             raise Exception("Global variable ROOT is required and must be defined")
         self.generate_node(self.tree)
+        print("Generation complete")
 
     def generate_node(self, node): # generates node (object with files and folders)
         self.handle_globals(node)
@@ -286,6 +294,12 @@ class Generator:
 
     def generate_folder(self, folder):
         name = folder["name"]
+        path = self.get_root_path() / Path(*self.path_stack) / name
+
+        if path.exists():
+            shutil.rmtree(path)
+            print(f"Deleted: {path}")
+
         self.path_stack.append(name) # adds the folder name to the path stack
         self.generate_node(folder) # generates the files and folders inside the folder
         self.path_stack.pop() # removes the folder name from the path stack
@@ -313,6 +327,7 @@ class Generator:
         full_path = base / Path("/".join(self.path_stack)) / name # base path, path stack, and file name
         full_path.parent.mkdir(parents=True, exist_ok=True) # creates the parent directories if they don't exist
         full_path.write_text("\n".join(lines), encoding="utf-8") # writes the lines to the file
+        print(f"Generated: {full_path}")
 
     def resolve(self, value):
         if isinstance(value, dict): # if the value is a dictionary, it resolves the dictionary and concatenates the values
@@ -337,6 +352,6 @@ text = Path("file.dcsl").read_text(encoding="utf-8")
 lexer = Lexer(text) # create a lexer object with the input text
 tokens = lexer.tokenize() # tokenize the input file
 parser = Parser(tokens) # create a parser object with the tokens
-parsed_tree = parser.parse()
-gen = Generator(parsed_tree)
-gen.generate()
+parsed_tree = parser.parse() # parse the tokens into a tree
+gen = Generator(parsed_tree) # create a generator object with the tree
+gen.generate() # generate the output files
