@@ -346,12 +346,12 @@ class Generator:
         return value
 
 
+for file in Path(".").glob("*.dcsl"):
+    text = Path(file).read_text(encoding="utf-8")
 
-text = Path("file.dcsl").read_text(encoding="utf-8")
-
-lexer = Lexer(text) # create a lexer object with the input text
-tokens = lexer.tokenize() # tokenize the input file
-parser = Parser(tokens) # create a parser object with the tokens
-parsed_tree = parser.parse() # parse the tokens into a tree
-gen = Generator(parsed_tree) # create a generator object with the tree
-gen.generate() # generate the output files
+    lexer = Lexer(text) # create a lexer object with the input text
+    tokens = lexer.tokenize() # tokenize the input file
+    parser = Parser(tokens) # create a parser object with the tokens
+    parsed_tree = parser.parse() # parse the tokens into a tree
+    gen = Generator(parsed_tree) # create a generator object with the tree
+    gen.generate() # generate the output files

@@ -3,8 +3,8 @@
 DDNet CFG Script Language (DCSL) it's a declarative language designed to automatically generate `.cfg` files and folder structures for [DDNet](https://ddnet.org/) ([Github](https://github.com/ddnet/ddnet)).
 
 
-The compiler takes a text file with a `JSON` similar syntax and parses and generates the structure.
-By default the file is `file.dcsl`, but can change it in the code(I will implement passing it as an argument)
+The compiler takes a text file with a `JSON` similar syntax and parses and generates the structure. 
+The script will parse any file with the `.dcsl` extension.
 
 ---
 
