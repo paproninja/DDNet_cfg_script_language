@@ -73,7 +73,7 @@ Example:
 
 # Global variables
 
-To define constants, write a property starting by `_` followed by the name. The variable will be saved without the `_` and can be called with `$name`. They can be defined in any abstraction level of folders.
+To define constants, write a property starting by `_` followed by the name. The variable will be saved without the `_` and can be called with `$name`. They can be defined in any folder or file.
 
 Example:
 
