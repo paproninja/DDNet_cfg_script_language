@@ -267,7 +267,7 @@ class Generator:
         self.globals = {}
 
     def generate(self): # main function that will generate the output files
-        print("Generating...")
+        print("Generating..." )
         self.handle_globals(self.tree)
         if "ROOT" not in self.globals: # if ROOT is not defined in the root object, it raises an exception
             raise Exception("Global variable ROOT is required and must be defined")
